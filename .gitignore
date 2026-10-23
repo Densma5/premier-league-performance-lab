@@ -1,0 +1,19 @@
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# SQL Server backups and database files
+*.bak
+*.mdf
+*.ndf
+*.ldf
+
+# Local editor settings
+.vscode/
