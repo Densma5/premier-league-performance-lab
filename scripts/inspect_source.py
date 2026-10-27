@@ -13,7 +13,6 @@ matches = data["matches"]
 
 print (len(matches))
 
-
 # Obtain the first element of the list and obtain its keys
 first_match = matches[0]
 print(first_match)
@@ -41,9 +40,15 @@ invalid_ft_type = 0
 invalid_ft_length = 0
 invalid_ft_values = 0
 negative_ft_scores = 0
+Qht_valid = 0
+Qft_valid = 0
+inconsistent_scores = 0
+
 
 # Validate score structure and half-time/full-time goal values
 for match in matches:
+    ht_valid = False
+    ft_valid = False
     # Looking for scores that are missing
     if "score" not in match:
         missing_score += 1
@@ -66,6 +71,10 @@ for match in matches:
         # Checking that the goals are not negatives in ht
         elif match["score"]["ht"][0] < 0 or match["score"]["ht"][1] < 0:
             negative_ht_scores += 1
+        else:
+            ht_valid = True
+            Qht_valid += 1
+
         # Looking for missing ft
         if "ft" not in match["score"]:
             missing_ft += 1
@@ -81,6 +90,16 @@ for match in matches:
         # Checking that the goals are not negatives in ft
         elif match["score"]["ft"][0] < 0 or match["score"]["ft"][1] < 0:
             negative_ft_scores += 1
+        else:
+            ft_valid = True
+            Qft_valid += 1
+
+        # Check score consistency only when both half-time and full-time scores are valid on both teams
+        if ht_valid and ft_valid:
+            # Neither team's half-time goals may exceed its full-time goals
+            if match["score"]["ht"][0] >  match["score"]["ft"][0] or match["score"]["ht"][1] >  match["score"]["ft"][1] :
+                inconsistent_scores += 1
+
 
 print("Matches missing score: ", missing_score)
 print("Invalid scores: ", invalid_score_type)
@@ -94,3 +113,6 @@ print("Full time score with invalid type: ", invalid_ft_type)
 print("Full time score with invalid length: ", invalid_ft_length)
 print("Matches with invalid ft value types: ", invalid_ft_values)
 print("Matches with negative ft goals: ", negative_ft_scores)
+print("Matches with valid half-time scores:", Qht_valid)
+print("Matches with valid full-time scores:", Qft_valid)
+print("Matches with inconsistent scores:", inconsistent_scores)
